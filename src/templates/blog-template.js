@@ -3,7 +3,7 @@ import Layout from "../components/layout"
 import { graphql, Link } from "gatsby"
 
 const Blog = ({data, pageContext}) => {
-    const {currentPage, isFirstPage, isLastPage} = pageContext
+    const {currentPage, isFirstPage, isLastPage, totalPages} = pageContext
     const nextPage = `/blog/${String(currentPage + 1)}`
     const prevPage = currentPage - 1 === 1 ? '/blog' : `/blog/${String(currentPage - 1)}`
 
@@ -26,12 +26,23 @@ const Blog = ({data, pageContext}) => {
                 </div> 
                 ))}
 
-                <div>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    maxWidth: 300,
+                    margin: '0 auto'
+                }}>
                     {!isFirstPage && (
                         <Link to={prevPage} rel='prev'>
                             Prev Page
                         </Link>
                     )}
+                    {Array.from({length: totalPages}, (_, index) => (
+                        <Link key={index} to={`/blog/${index === 0 ? '' : index + 1}`}>
+                            {index + 1}
+                        </Link>
+                    ))}
                     {!isLastPage && (
                         <Link to={nextPage} rel='next'>
                             Next Page
@@ -47,7 +58,11 @@ export const query = graphql`
     query($skip: Int!, $limit: Int!, ) {
         allMarkdownRemark(
             skip: $skip
-            limit: $limit
+            limit: $limit,
+            sort: {
+                order: DESC,
+                fields: [frontmatter___date]
+            }
         ) {
             totalCount
             edges {
@@ -57,7 +72,7 @@ export const query = graphql`
                     }
                     frontmatter {
                         title
-                        date
+                        date(fromNow: true)
                     }
                     excerpt
                 }
