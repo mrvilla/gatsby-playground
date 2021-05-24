@@ -598,16 +598,26 @@ pre tt:after {
 button {
   cursor: pointer;
 }
-
 .active {
+  text-decoration: none;
   color: #ffaf1e;
-  text-decoration: none;
 }
-.navlink {
-  color: white;
+.navlink, 
+.netlify-identity-signup,
+.netlify-identity-login,
+.netlify-identity-logout {
   text-decoration: none;
+  color: white;
 }
 .active:hover,
-.navlink:hover {
+.navlink:hover,
+.netlify-identity-signup:hover,
+.netlify-identity-login:hover,
+.netlify-identity-logout:hover {
   text-decoration: underline;
+}
+.netlify-identity-menu {
+  list-style: none;
+  margin: 0;
+  color: white;
 }
